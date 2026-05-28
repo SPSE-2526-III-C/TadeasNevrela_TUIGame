@@ -1,21 +1,14 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#include "core/types.h"
+#include "types.h"
 
 typedef struct {
-    int tick;
-    int event_timer;
-    bool running;
-    MenuState menu;
-    Camera camera;
-    Map map;
-    Door doors[MAX_DOORS];
-    size_t door_count;
-    LogBuffer logs;
-    IntegrityState integrity;
+    Screen current_screen;
+    int    menu_cursor;
+    int    should_quit;
 } GameState;
 
-void game_state_init(GameState *game);
+void game_state_init(GameState *state);
 
 #endif

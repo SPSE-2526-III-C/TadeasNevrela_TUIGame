@@ -1,6 +1,14 @@
+#include <ncurses.h>
 #include "core/input.h"
 
 InputAction input_read_action(void) {
-    /* TODO: implement real input mapping from keyboard to InputAction. */
-    return INPUT_NONE;
+    int ch = getch();
+    switch (ch) {
+        case KEY_UP:    return ACTION_UP;
+        case KEY_DOWN:  return ACTION_DOWN;
+        case '\n':      return ACTION_SELECT;
+        case 27:        return ACTION_BACK;    /* ESC */
+        case 'q':       return ACTION_QUIT;
+        default:        return ACTION_NONE;
+    }
 }

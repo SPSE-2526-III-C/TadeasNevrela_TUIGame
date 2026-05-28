@@ -1,20 +1,79 @@
-#include <stdio.h>
-#include <string.h>
+#include <ncurses.h>
 
 #include "core/game_state.h"
+#include "core/input.h"
 
-void game_state_init(GameState *game) {
-    memset(game, 0, sizeof(*game));
-    game->running = true;
-    game->menu.current = SCREEN_MAIN_MENU;
-    game->integrity.integrity = 100;
-}
+/* Forward declarations — implement these as you fill in each module */
+void update_game(GameState *state, InputAction action);
+void render_game(GameState *state);
 
 int main(void) {
-    GameState game;
+    /* ncurses setup */
+    initscr();
+    cbreak();
+    noecho();
+    keypad(stdscr, TRUE);
+    nodelay(stdscr, TRUE);   /* non-blocking input so loop runs freely */
+    curs_set(0);
 
-    game_state_init(&game);
-    puts("TUI Game scaffold is ready.");
-    puts("Read GUIDE.md for the build order and module tutorial.");
+    GameState state;
+    game_state_init(&state);
+
+    while (!state.should_quit) {
+        InputAction action = input_read_action();
+        update_game(&state, action);
+        render_game(&state);
+    }
+
+    endwin();   /* restore terminal */
     return 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* Stub implementations — replace these as you build each module       */
+/* ------------------------------------------------------------------ */
+
+void update_game(GameState *state, InputAction action) {
+    if (action == ACTION_QUIT) {
+        state->should_quit = 1;
+    }
+    /* TODO: call menu_handle_input, doors_update, events_update, etc. */
+}
+
+void render_game(GameState *state) {
+    clear();
+    /* TODO: call renderer_draw(state) once renderer.c is implemented  */
+
+    /* Temporary: just show current screen name so you know it works   */
+    const char *names[] = {"MENU","CAMERAS","DOORS","LOGS","SYSTEMS"};
+    mvprintw(0, 0, "Screen: %s", names[state->current_screen]);
+    mvprintw(1, 0, "Press q to quit");
+    refresh();
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* bottom of main.c or in a new src/core/game_state.c */
+#include "core/game_state.h"
+
+void game_state_init(GameState *state) {
+    state->current_screen = SCREEN_MENU;
+    state->menu_cursor    = 0;
+    state->should_quit    = 0;
 }
