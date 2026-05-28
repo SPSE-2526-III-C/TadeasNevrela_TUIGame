@@ -94,7 +94,8 @@ void render_game(GameState *state) {
 #include "core/game_state.h"
 
 void game_state_init(GameState *state) {
-    state->current_screen = SCREEN_MENU;
-    state->menu_cursor    = 0;
-    state->should_quit    = 0;
+    state->current_screen     = SCREEN_MENU;
+    state->menu_cursor        = 0;
+    state->should_quit        = 0;
+    state->system_integrity   = 100;
 }

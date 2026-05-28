@@ -64,7 +64,7 @@ void menu_draw(GameState *state) {
     }
 
     /* Footer at bottom of terminal */
-    const char *footer = "↑↓ move   ENTER select   Q quit";
+    const char *footer = "/\\ \\/ move   ENTER select   Q quit";
     mvprintw(rows - 1, (cols - (int)strlen(footer)) / 2, "%s", footer);
 
     /* Integrity bar top-right */

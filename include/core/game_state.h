@@ -8,7 +8,6 @@ typedef struct {
     int     menu_cursor;
     int     should_quit;
 
-    /* Add these now — you'll need them soon */
     int     system_integrity;   /* 100 = healthy, 0 = collapsed */
     int     tick;               /* frame counter for timed events */
 } GameState;
