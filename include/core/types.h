@@ -1,6 +1,7 @@
 #ifndef TYPES_H
 #define TYPES_H
 
+/* High-level screens the terminal can display. */
 typedef enum {
     SCREEN_MENU,
     SCREEN_CAMERAS,
@@ -10,6 +11,7 @@ typedef enum {
     SCREEN_EMERGENCY
 } Screen;
 
+/* Normalized input actions produced from raw keyboard input. */
 typedef enum {
     ACTION_NONE,
     ACTION_UP,
@@ -19,7 +21,7 @@ typedef enum {
     ACTION_QUIT
 } InputAction;
 
-/* Door states — keep as enum so displayed state can differ from real */
+/* Door states keep display logic separate from internal state. */
 typedef enum {
     DOOR_LOCKED,
     DOOR_UNLOCKED,
@@ -27,13 +29,13 @@ typedef enum {
     DOOR_UNKNOWN
 } DoorState;
 
-/* Integrity thresholds — horror escalation stages */
+/* Integrity thresholds mark the different escalation stages. */
 typedef enum {
-    STAGE_NORMAL      = 100,
-    STAGE_SUSPICION   = 75,
-    STAGE_CONTRADICTION = 50,
-    STAGE_CONTROL_LOSS  = 25,
-    STAGE_FAILURE       = 0
+    STAGE_NORMAL         = 100,
+    STAGE_SUSPICION      = 75,
+    STAGE_CONTRADICTION  = 50,
+    STAGE_CONTROL_LOSS   = 25,
+    STAGE_FAILURE        = 0
 } IntegrityThreshold;
 
 #endif
