@@ -1,12 +1,16 @@
 #ifndef GAME_STATE_H
 #define GAME_STATE_H
 
-#include "types.h"
+#include "core/types.h"
 
 typedef struct {
-    Screen current_screen;
-    int    menu_cursor;
-    int    should_quit;
+    Screen  current_screen;
+    int     menu_cursor;
+    int     should_quit;
+
+    /* Add these now — you'll need them soon */
+    int     system_integrity;   /* 100 = healthy, 0 = collapsed */
+    int     tick;               /* frame counter for timed events */
 } GameState;
 
 void game_state_init(GameState *state);

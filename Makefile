@@ -1,5 +1,6 @@
-CC := gcc
+CC     := gcc
 CFLAGS := -std=c11 -Wall -Wextra -Wpedantic -Iinclude
+LIBS   := -lncurses
 
 SRC := $(shell find src -name '*.c')
 OBJ := $(SRC:.c=.o)
@@ -10,7 +11,7 @@ BIN := tuigame
 all: $(BIN)
 
 $(BIN): $(OBJ)
-	$(CC) $(CFLAGS) $(OBJ) -o $@
+	$(CC) $(CFLAGS) $(OBJ) -o $@ $(LIBS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@

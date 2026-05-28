@@ -1,19 +1,19 @@
+#define _POSIX_C_SOURCE 200809L
 #include <ncurses.h>
-
+#include <unistd.h>
 #include "core/game_state.h"
 #include "core/input.h"
+#include "ui/menu.h"
 
-/* Forward declarations — implement these as you fill in each module */
 void update_game(GameState *state, InputAction action);
 void render_game(GameState *state);
 
 int main(void) {
-    /* ncurses setup */
     initscr();
     cbreak();
     noecho();
     keypad(stdscr, TRUE);
-    nodelay(stdscr, TRUE);   /* non-blocking input so loop runs freely */
+    nodelay(stdscr, TRUE);
     curs_set(0);
 
     GameState state;
@@ -23,34 +23,55 @@ int main(void) {
         InputAction action = input_read_action();
         update_game(&state, action);
         render_game(&state);
+
+        state.tick++;
+        napms(16);   /* ~60fps cap — eliminates pointless redraws */
     }
 
-    endwin();   /* restore terminal */
+    endwin();
     return 0;
 }
-
-/* ------------------------------------------------------------------ */
-/* Stub implementations — replace these as you build each module       */
-/* ------------------------------------------------------------------ */
 
 void update_game(GameState *state, InputAction action) {
     if (action == ACTION_QUIT) {
         state->should_quit = 1;
+        return;
     }
-    /* TODO: call menu_handle_input, doors_update, events_update, etc. */
+    switch (state->current_screen) {
+        case SCREEN_MENU:
+            menu_handle_input(state, action);
+            break;
+        default:
+            if (action == ACTION_BACK)
+                state->current_screen = SCREEN_MENU;
+            break;
+    }
 }
 
 void render_game(GameState *state) {
-    clear();
-    /* TODO: call renderer_draw(state) once renderer.c is implemented  */
-
-    /* Temporary: just show current screen name so you know it works   */
-    const char *names[] = {"MENU","CAMERAS","DOORS","LOGS","SYSTEMS"};
-    mvprintw(0, 0, "Screen: %s", names[state->current_screen]);
-    mvprintw(1, 0, "Press q to quit");
+    erase();
+    switch (state->current_screen) {
+        case SCREEN_MENU:
+            menu_draw(state);
+            break;
+        case SCREEN_CAMERAS:
+            mvprintw(0, 0, "[CAMERAS]  ESC to go back");
+            break;
+        case SCREEN_DOORS:
+            mvprintw(0, 0, "[DOORS]    ESC to go back");
+            break;
+        case SCREEN_LOGS:
+            mvprintw(0, 0, "[LOGS]     ESC to go back");
+            break;
+        case SCREEN_SYSTEMS:
+            mvprintw(0, 0, "[SYSTEMS]  ESC to go back");
+            break;
+        case SCREEN_EMERGENCY:
+            mvprintw(0, 0, "[EMERGENCY PROTOCOLS]  ESC to go back");
+            break;
+    }
     refresh();
 }
-
 
 
 
